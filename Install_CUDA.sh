@@ -61,33 +61,6 @@ function get_supported_cudnn_versions() {
         if [[ $support_2204 == "O" || $support_2004 == "O" ]]; then  
             supported_versions+=("$cudnn_version")
         fi
-<<<<<<< HEAD:Install_CUDA_old.sh
-    done
-    if [ "${VAR}" != "" ]; then
-        CUDNN_VERSION=${VAR}
-    fi
-    CUDNN_PAGE_VERSION=${arr_cudnn_cuda_version[${CUDNN_VERSION_INDEX}]}
-    CUDNN_VERSION_LEVEL=${arr_cudnn_level[${CUDNN_VERSION_INDEX}]}
-    
-    if [ ${CUDNN_USE_LINUX} = true ]; then
-        MSG_CUDNN_USE_LINUX="Yes"
-    else
-        MSG_CUDNN_USE_LINUX="No"
-    fi
-  
-  
-    CUDNN_USE_LINUX_MSG="[ Default ${MSG_CUDNN_USE_LINUX} ] (y/n): "
-    echo -e "Install CUDNN LINUX .tar FILE?\n( If no will install .deb FILE )"
-    read -p "${CUDNN_USE_LINUX_MSG}" VAR
-    while [ "${VAR}" != "" ] && [ "${VAR}" != "y" ] && [ "${VAR}" != "n" ];
-    do
-        echo -e "Please Input y or n"
-        read -p "${CUDNN_USE_LINUX_MSG}" VAR
-    done
-    if [ "${VAR}" != "" ] && [ "${VAR}" = "y" ]; then
-        CUDNN_USE_LINUX=true
-        MSG_CUDNN_USE_LINUX="Yes"
-=======
     done <<< "$out"
     echo "${supported_versions[@]}"
 }
@@ -113,7 +86,6 @@ function install_cuda() {
 
     if [[ $cuda_major_version -le 11 ]] && [[ $cuda_minor_version -le 6 ]]; then
         sudo apt-key add /var/cuda-repo-ubuntu${Ubuntu}-${cuda_major_version}-${cuda_minor_version}-local/*.pub
->>>>>>> main:Install_CUDA.sh
     else
         sudo cp /var/cuda-repo-ubuntu${Ubuntu}-${cuda_major_version}-${cuda_minor_version}-local/cuda-*-keyring.gpg /usr/share/keyrings/
     fi
@@ -136,13 +108,6 @@ function install_cuda() {
     source $BASHRC_FILE
 }
 
-<<<<<<< HEAD:Install_CUDA_old.sh
-if [ "$1" = ${REMOVE_CMD} ]; then
-    MSG_REMOVE_DRIVER="Remove"
-else
-    MSG_REMOVE_DRIVER="Reinstall"
-fi
-=======
 function install_cudnn() {
     local cudnn_version="$1"
     local cudnn_cuda_version="$2"
@@ -150,7 +115,6 @@ function install_cudnn() {
     local cudnn_lib_name="${cudnn_version}.${cudnn_level}-1+cuda${cudnn_cuda_version}"
     local cudnn_filename=""
     local cudnn_filename_no_ext=""
->>>>>>> main:Install_CUDA.sh
 
     if [ ${CUDNN_USE_LINUX} = true ]; then
         cudnn_filename="cudnn-linux-x64-${cudnn_version}.tar.xz"
@@ -160,31 +124,9 @@ function install_cudnn() {
         cudnn_filename_no_ext="libcudnn${cudnn_level}_${cudnn_version}-1+cuda${cudnn_cuda_version}"
     fi
 
-<<<<<<< HEAD:Install_CUDA_old.sh
-CUDA_EXISTS=false
-if [ -d "/usr/local/cuda" ] \
-    || [ $(dpkg -l | grep cuda | grep -v -E "(repo-|TensorRT)" | wc -l) -ne 0 ] \
-    || [ $(ls /usr/share/keyrings | grep -c cuda) -ne 0 ] \
-    || [ $(ls /etc/apt/sources.list.d | grep -c cuda) -ne 0 ]; then
-
-    echo "======================"
-    echo "CUDA Exists! You want to keep or ${REMOVE_MSG}?"
-    echo "If reinstall will remove CUDA and CUDNN"
-    read -p "[ Default keep ] (k/r):" KEEP_VAR
-    if [ "${KEEP_VAR}" != "" ] && [ "${KEEP_VAR}" = "r" ]; then
-        CUDA_REMOVE=true
-        CUDNN_REMOVE=true
-    elif [ "${KEEP_VAR}" = "" ] || [ "${KEEP_VAR}" = "k" ]; then
-        CUDA_REMOVE=false
-        CUDA_INSTALL=false
-    fi
-    CUDA_EXISTS=true
-fi
-=======
     echo "Installing cuDNN $cudnn_version..."
     echo "Downloading cuDNN installation file: $cudnn_filename"
     wget -O $cudnn_filename "https://developer.download.nvidia.com/compute/machine-learning/cudnn/secure/v${cudnn_version}/prod/${cudnn_filename}" || exit 1
->>>>>>> main:Install_CUDA.sh
 
     if [ ${CUDNN_USE_LINUX} = true ]; then
         tar -xvf $cudnn_filename || exit 1
