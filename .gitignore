@@ -1,0 +1,7 @@
+.coverage
+.vscode
+.pytest_cache
+Cuda
+test
+cuda-repo*
+cudnn-local*
