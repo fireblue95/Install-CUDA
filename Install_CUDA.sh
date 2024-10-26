@@ -207,7 +207,7 @@ if [ "$1" != ${REMOVE_CMD} ]; then
     fi
     CUDNN_PAGE_VERSION=${arr_cudnn_cuda_version[${CUDNN_VERSION_INDEX}]}
     CUDNN_VERSION_LEVEL=${arr_cudnn_level[${CUDNN_VERSION_INDEX}]}
-  
+    
     if [ ${CUDNN_USE_LINUX} = true ]; then
         MSG_CUDNN_USE_LINUX="Yes"
     else
@@ -280,12 +280,10 @@ if [ "$1" = ${REMOVE_CMD} ]; then
     REMOVE_MSG="remove"
 fi
 
-if [ ${DRIVER_REMOVE} = true ] && [ "$1" = ${REMOVE_CMD} ]; then
+if [ "$1" = ${REMOVE_CMD} ]; then
     MSG_REMOVE_DRIVER="Remove"
-elif [ ${DRIVER_REMOVE} = true ]; then
-    MSG_REMOVE_DRIVER="Reinstall"
 else
-    MSG_REMOVE_DRIVER="Keep"
+    MSG_REMOVE_DRIVER="Reinstall"
 fi
 
 if [ $(dpkg -l | grep -c nvidia-driver) -ne 0 ] \
@@ -303,7 +301,7 @@ fi
 
 CUDA_EXISTS=false
 if [ -d "/usr/local/cuda" ] \
-    || [ $(dpkg -l | grep cuda | grep -v repo- | wc -l) -ne 0 ] \
+    || [ $(dpkg -l | grep cuda | grep -v -E "(repo-|TensorRT)" | wc -l) -ne 0 ] \
     || [ $(ls /usr/share/keyrings | grep -c cuda) -ne 0 ] \
     || [ $(ls /etc/apt/sources.list.d | grep -c cuda) -ne 0 ]; then
 
