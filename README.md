@@ -1,7 +1,7 @@
 # Install-CUDA and CUDNN in Ubuntu
 Use Script to Install CUDA, CUDNN
 
-Last updated: 2023/07/26
+Last updated: 2024/10/26
 
 ## Support Version
 
@@ -87,4 +87,5 @@ or
 python install_cuda.py --uninstall
 ```
 
-
+# IF you have the issue maybe can check
+https://github.com/fireblue95/Install-CUDA/issues?q=is%3Aissue+is%3Aclosed
