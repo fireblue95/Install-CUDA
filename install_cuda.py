@@ -156,6 +156,10 @@ class InstallCuda:
               f"{'CUDNN use Sample':<18}:\t{'yes' if self.CUDNN_INSTALL_SAMPLE is True else 'no'}")
         print('#' * 30)
 
+    def get_text(self, cmd: str) -> str:
+        return subprocess.run(
+            cmd, shell=True, capture_output=True, text=True).stdout.strip()
+
     def run(self) -> None:
         self.curr_path = os.getcwd()
 
@@ -416,10 +420,6 @@ class InstallCuda:
         self.check_driver_exists()
 
         self.check_cuda_exists()
-
-    def get_text(self, cmd: str) -> str:
-        return subprocess.run(
-            cmd, shell=True, capture_output=True, text=True).stdout.strip()
 
     def check_driver_exists(self) -> None:
         # Condition
