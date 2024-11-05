@@ -292,10 +292,11 @@ class InstallCuda:
 
             self.run_bash('sudo apt-get update')
 
-            if int(self.CUDA_VERSION_MAJOR) == 12 and int(self.CUDA_VERSION_MINOR) >= 3 \
-                    or int(self.CUDA_VERSION_MAJOR) == 11 and int(self.CUDA_VERSION_MINOR) == 8:
+            if int(self.CUDA_VERSION_MAJOR) == 12 and int(self.CUDA_VERSION_MINOR) >= 3:
                 package_name = f'cuda-toolkit-{self.CUDA_VERSION_MAJOR}-{self.CUDA_VERSION_MINOR}'
 
+            elif int(self.CUDA_VERSION_MAJOR) == 11 and int(self.CUDA_VERSION_MINOR) == 8:
+                package_name = 'cuda-11-8'
             else:
                 package_name = 'cuda'
             self.run_bash(f'sudo apt-get install -y {package_name}')

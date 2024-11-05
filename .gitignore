@@ -5,3 +5,5 @@ test/
 .coverage
 cuda-repo*
 cudnn-local*
+cuda_*.run
+tmp/
