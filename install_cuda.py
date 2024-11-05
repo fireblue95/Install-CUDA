@@ -1,3 +1,5 @@
+
+
 import glob
 import os
 import shutil
@@ -207,9 +209,13 @@ class InstallCuda:
             print('Uninstall Complete.')
             exit()
 
+        print(f'{"CUDA":=^50}')
         self.install_Cuda()
+        print(f'{"CUDA":=^50}')
 
+        print(f'{"CUDNN":=^50}')
         self.install_cudnn()
+        print(f'{"CUDNN":=^50}')
 
         print('=' * 30)
         self.run_bash('nvidia-smi')
@@ -223,7 +229,22 @@ class InstallCuda:
                 'cat /usr/local/cuda/include/cudnn_version.h | grep MAJOR -A 2')
         else:
             self.run_bash('dpkg -l | grep cudnn')
+
         print("Done.")
+        print('Please reboot the system.')
+
+    def install_driver(self) -> None:
+        if int(self.CUDA_VERSION_MAJOR) == 12 and int(self.CUDA_VERSION_MINOR) >= 3:
+            if int(self.CUDA_VERSION_MINOR) >= 6:
+                package_name = 'nvidia-open'
+            elif int(self.CUDA_VERSION_MINOR) == 5:
+                package_name = 'nvidia-driver-555-open'
+            elif int(self.CUDA_VERSION_MINOR) == 4:
+                package_name = 'nvidia-driver-550-open'
+            elif int(self.CUDA_VERSION_MINOR) == 3:
+                package_name = 'cuda-drivers-545'
+
+            self.run_bash(f'sudo apt-get install -y {package_name}')
 
     def install_Cuda(self) -> None:
         self.CUDA_VERSION_MAJOR, self.CUDA_VERSION_MINOR, self.CUDA_VERSION_PATCHLEVEL = self.CUDA_VERSION.split(
@@ -271,11 +292,21 @@ class InstallCuda:
 
             self.run_bash('sudo apt-get update')
 
-            if self.CUDA_VERSION_MAJOR == 12 and self.CUDA_VERSION_MINOR >= 3:
+            if int(self.CUDA_VERSION_MAJOR) == 12 and int(self.CUDA_VERSION_MINOR) >= 3 \
+                    or int(self.CUDA_VERSION_MAJOR) == 11 and int(self.CUDA_VERSION_MINOR) == 8:
                 package_name = f'cuda-toolkit-{self.CUDA_VERSION_MAJOR}-{self.CUDA_VERSION_MINOR}'
+
             else:
                 package_name = 'cuda'
             self.run_bash(f'sudo apt-get install -y {package_name}')
+
+            # ----------------------------------------------------------------------------
+            # Install CUDA driver
+
+            self.install_driver()
+
+            # Install CUDA driver
+            # ----------------------------------------------------------------------------
 
             # Add CUDA env path
             CUDA_ENV_PATH = f"export PATH=/usr/local/cuda-{self.CUDA_VERSION_MAJOR}.{self.CUDA_VERSION_MINOR}/bin:\$PATH"
@@ -386,6 +417,10 @@ class InstallCuda:
         if self.CUDA_REMOVE:
             if int(self.get_text('dpkg -l | grep -c cuda')) > 0:
                 self.run_bash('sudo apt remove --autoremove --purge -y cuda*')
+                self.run_bash(
+                    'sudo apt remove --autoremove --purge -y nvidia-cuda-toolkit')
+                self.run_bash(
+                    f'sudo apt remove --autoremove --purge -y *nvidia*')
             self.run_bash('''sudo rm -rf /usr/local/cuda* \
         /usr/share/keyrings/cuda* \
         /etc/apt/sources.list.d/cuda*''')

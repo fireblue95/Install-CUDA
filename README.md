@@ -1,7 +1,7 @@
 # Install-CUDA and CUDNN in Ubuntu
 Use Script to Install CUDA, CUDNN
 
-Last updated: 2024/10/26
+Last updated: 2024/11/05
 
 ## Support Version
 
