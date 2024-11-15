@@ -209,13 +209,16 @@ class InstallCuda:
             print('Uninstall Complete.')
             exit()
 
-        print(f'{"CUDA":=^50}')
+        print('\n\n')
+        print(f'{" CUDA ":=^50}')
         self.install_Cuda()
-        print(f'{"CUDA":=^50}')
+        print(f'{" CUDA ":=^50}')
+        print('\n\n')
 
-        print(f'{"CUDNN":=^50}')
+        print(f'{" CUDNN ":=^50}')
         self.install_cudnn()
-        print(f'{"CUDNN":=^50}')
+        print(f'{" CUDNN ":=^50}')
+        print('\n\n')
 
         print('=' * 30)
         self.run_bash('nvidia-smi')
